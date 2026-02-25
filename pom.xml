@@ -32,6 +32,13 @@
             <scope>test</scope>
         </dependency>
 
+        <!-- WebDriverManager -->
+        <dependency>
+            <groupId>io.github.bonigarcia</groupId>
+            <artifactId>webdrivermanager</artifactId>
+            <version>5.9.3</version>
+        </dependency>
+
         <!-- Lombok (Opcional, pero recomendado para frameworks modernos) -->
         <dependency>
             <groupId>org.projectlombok</groupId>
