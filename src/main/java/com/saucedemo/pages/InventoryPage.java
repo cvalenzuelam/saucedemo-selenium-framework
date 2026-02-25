@@ -51,4 +51,8 @@ public class InventoryPage extends BasePage {
     public String getFirstItemPrice() {
         return driver.findElements(itemPrices).get(0).getText();
     }
+
+    public void goToCart() {
+        driver.findElement(cartBadge).click();
+    }
 }

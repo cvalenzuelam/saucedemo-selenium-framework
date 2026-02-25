@@ -1,9 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
-<suite name="Saucedemo Test Suite">
-    <test name="Regression Tests">
-        <packages>
-            <package name="com.saucedemo.tests"/>
-        </packages>
+
+<!-- 1. La Suite es el conjunto total de pruebas -->
+<suite name="SauceDemo Automation Suite" verbose="1">
+
+    <!-- 2. El Test es un grupo lógico de pruebas (ej: Regresión, Humo, etc.) -->
+    <test name="End to End Purchase Flow">
+        
+        <!-- 3. Aquí listamos las clases que queremos ejecutar -->
+        <classes>
+            <class name="com.saucedemo.tests.LoginTest"/>
+            <class name="com.saucedemo.tests.InventoryTest"/>
+            <class name="com.saucedemo.tests.CartTest"/>
+            <class name="com.saucedemo.tests.CheckoutTest"/>
+        </classes>
     </test>
+
 </suite>
