@@ -14,13 +14,14 @@ public class InventoryTest extends BaseTest {
     @BeforeMethod
     public void loginBeforeInventory() {
         loginPage = new LoginPage(driver);
-        loginPage.login("standard_user", "secret_sauce");
-        inventoryPage = new InventoryPage(driver);
+        // Usamos Fluent Interface para inicializar inventoryPage
+        inventoryPage = loginPage.loginAs("standard_user", "secret_sauce");
     }
 
     @Test(priority = 1, description = "Validar que el título de la página es Products")
     public void testInventoryTitle() {
-        Assert.assertEquals(inventoryPage.getTitle(), "Products");
+        // ERROR INTENCIONADO: Esperamos "Tienda de Mochilas" para forzar el fallo y ver el screenshot
+        Assert.assertEquals(inventoryPage.getTitle(), "Tienda de Mochilas", "El título no coincide (Fallo intencionado)");
     }
 
     @Test(priority = 2, description = "Validar que hay 6 productos en la lista")

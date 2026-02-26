@@ -24,14 +24,41 @@ public class LoginPage extends BasePage {
     }
 
     // 3. ACCIONES (Los métodos que los tests llamarán)
-    
+
+    public LoginPage enterUsername(String user) {
+        driver.findElement(usernameInput).sendKeys(user);
+        return this;
+    }
+
+    public LoginPage enterPassword(String pass) {
+        driver.findElement(passwordInput).sendKeys(pass);
+        return this;
+    }
+
+    public InventoryPage clickLogin() {
+        driver.findElement(loginButton).click();
+        return new InventoryPage(driver);
+    }
+
     /**
      * Escribe el usuario y contraseña y hace click en el botón.
+     * @return Una nueva instancia de InventoryPage tras un login exitoso.
      */
-    public void login(String user, String pass) {
-        driver.findElement(usernameInput).sendKeys(user);
-        driver.findElement(passwordInput).sendKeys(pass);
+    public InventoryPage loginAs(String user, String pass) {
+        enterUsername(user);
+        enterPassword(pass);
+        return clickLogin();
+    }
+
+    /**
+     * Realiza un intento de login que se espera que falle.
+     * @return La misma instancia de LoginPage para verificar el error.
+     */
+    public LoginPage loginWithInvalidCredentials(String user, String pass) {
+        enterUsername(user);
+        enterPassword(pass);
         driver.findElement(loginButton).click();
+        return this;
     }
 
     /**

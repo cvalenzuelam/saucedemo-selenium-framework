@@ -17,14 +17,13 @@ public class CheckoutTest extends BaseTest {
     @BeforeMethod
     public void setupCheckout() {
         loginPage = new LoginPage(driver);
-        inventoryPage = new InventoryPage(driver);
         cartPage = new CartPage(driver);
         stepOnePage = new CheckoutStepOnePage(driver);
         stepTwoPage = new CheckoutStepTwoPage(driver);
         completePage = new CheckoutCompletePage(driver);
 
-        // Preparación: Login -> Add to Cart -> Cart -> Checkout
-        loginPage.login("standard_user", "secret_sauce");
+        // Preparación: Login -> Add to Cart -> Cart -> Checkout usando Fluent Interface
+        inventoryPage = loginPage.loginAs("standard_user", "secret_sauce");
         inventoryPage.addFirstItemToCart();
         inventoryPage.goToCart();
         cartPage.clickCheckout();

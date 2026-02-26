@@ -4,6 +4,10 @@
 <!-- 1. La Suite es el conjunto total de pruebas -->
 <suite name="SauceDemo Automation Suite" verbose="1">
 
+    <listeners>
+        <listener class-name="com.saucedemo.listeners.AllureListener"/>
+    </listeners>
+
     <!-- 2. El Test es un grupo lógico de pruebas (ej: Regresión, Humo, etc.) -->
     <test name="End to End Purchase Flow">
         

@@ -3,6 +3,7 @@ package com.saucedemo.tests;
 import com.saucedemo.pages.LoginPage;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 /**
@@ -18,50 +19,33 @@ public class LoginTest extends BaseTest {
         loginPage = new LoginPage(driver);
     }
 
+    @DataProvider(name = "invalidLoginData")
+    public Object[][] getInvalidLoginData() {
+        return new Object[][]{
+            {"locked_out_user", "secret_sauce", "Epic sadface: Sorry, this user has been locked out."},
+            {"non_existent_user", "secret_sauce", "Epic sadface: Username and password do not match any user in this service"},
+            {"standard_user", "wrong_password", "Epic sadface: Username and password do not match any user in this service"},
+            {"", "secret_sauce", "Epic sadface: Username is required"},
+            {"standard_user", "", "Epic sadface: Password is required"}
+        };
+    }
+
     @Test(priority = 1, description = "Login exitoso con usuario estándar")
     public void testSuccessfulLogin() {
-        loginPage.login("standard_user", "secret_sauce");
+        String title = loginPage.loginAs("standard_user", "secret_sauce")
+                                .getTitle();
+        
+        Assert.assertEquals(title, "Products", "El título de la página de inventario es incorrecto.");
         Assert.assertTrue(driver.getCurrentUrl().contains("inventory.html"), 
-            "No se redirigió a la página de inventario tras el login exitoso.");
+            "El login con usuario estándar no redirigió a la página de inventario.");
     }
 
-    @Test(priority = 2, description = "Error al intentar entrar con usuario bloqueado")
-    public void testLockedOutUser() {
-        loginPage.login("locked_out_user", "secret_sauce");
-        String error = loginPage.getErrorMessage();
-        Assert.assertEquals(error, "Epic sadface: Sorry, this user has been locked out.", 
-            "El mensaje para usuario bloqueado es incorrecto.");
-    }
-
-    @Test(priority = 3, description = "Error con usuario que no existe")
-    public void testInvalidUser() {
-        loginPage.login("non_existent_user", "secret_sauce");
-        String error = loginPage.getErrorMessage();
-        Assert.assertEquals(error, "Epic sadface: Username and password do not match any user in this service", 
-            "El mensaje para usuario inexistente es incorrecto.");
-    }
-
-    @Test(priority = 4, description = "Error con contraseña incorrecta")
-    public void testWrongPassword() {
-        loginPage.login("standard_user", "wrong_password");
-        String error = loginPage.getErrorMessage();
-        Assert.assertEquals(error, "Epic sadface: Username and password do not match any user in this service", 
-            "El mensaje para contraseña incorrecta es incorrecto.");
-    }
-
-    @Test(priority = 5, description = "Error cuando el nombre de usuario está vacío")
-    public void testEmptyUsername() {
-        loginPage.login("", "secret_sauce");
-        String error = loginPage.getErrorMessage();
-        Assert.assertEquals(error, "Epic sadface: Username is required", 
-            "Debería indicar que el usuario es requerido.");
-    }
-
-    @Test(priority = 6, description = "Error cuando el password está vacío")
-    public void testEmptyPassword() {
-        loginPage.login("standard_user", "");
-        String error = loginPage.getErrorMessage();
-        Assert.assertEquals(error, "Epic sadface: Password is required", 
-            "Debería indicar que el password es requerido.");
+    @Test(dataProvider = "invalidLoginData", priority = 2, description = "Intentos de login con credenciales inválidas")
+    public void testInvalidLoginAttempts(String username, String password, String expectedError) {
+        String actualError = loginPage.loginWithInvalidCredentials(username, password)
+                                     .getErrorMessage();
+        
+        Assert.assertEquals(actualError, expectedError, 
+            "El mensaje de error no es el esperado para el usuario: " + username);
     }
 }

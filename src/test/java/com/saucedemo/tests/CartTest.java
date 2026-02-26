@@ -16,11 +16,10 @@ public class CartTest extends BaseTest {
     @BeforeMethod
     public void setupCart() {
         loginPage = new LoginPage(driver);
-        inventoryPage = new InventoryPage(driver);
         cartPage = new CartPage(driver);
 
-        // Flujo inicial para llegar al carrito
-        loginPage.login("standard_user", "secret_sauce");
+        // Flujo inicial para llegar al carrito usando Fluent Interface
+        inventoryPage = loginPage.loginAs("standard_user", "secret_sauce");
         inventoryPage.addFirstItemToCart();
         inventoryPage.goToCart();
     }
