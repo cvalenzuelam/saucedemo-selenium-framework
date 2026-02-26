@@ -37,15 +37,17 @@ public class CartPage extends BasePage {
     public void removeFirstItem() {
         int initialCount = getCartItemsCount();
         if (initialCount > 0) {
-            click(removeButtons);
-            // Esperamos a que el número de elementos cambie con un timeout más amigable
+            // Re-buscamos el elemento justo antes de click para evitar stale elements
+            org.openqa.selenium.WebElement removeBtn = driver.findElement(removeButtons);
+            ((org.openqa.selenium.JavascriptExecutor) driver).executeScript("arguments[0].click();", removeBtn);
+            
+            // Esperamos explícitamente a que el conteo baje
             try {
                 wait.until(d -> getCartItemsCount() < initialCount);
             } catch (Exception e) {
-                // Fallback: si el wait falló, forzamos una recarga o validamos el estado actual
-                if (getCartItemsCount() >= initialCount) {
-                    throw new org.openqa.selenium.TimeoutException("El producto no fue removido del carrito a tiempo.");
-                }
+                // Reintento final por si hubo lag en el click JS
+                ((org.openqa.selenium.JavascriptExecutor) driver).executeScript("arguments[0].click();", driver.findElement(removeButtons));
+                wait.until(d -> getCartItemsCount() < initialCount);
             }
         }
     }

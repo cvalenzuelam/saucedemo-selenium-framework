@@ -25,8 +25,12 @@ public class BasePage {
             wait.until(org.openqa.selenium.support.ui.ExpectedConditions.elementToBeClickable(locator));
             element.click();
         } catch (Exception e) {
+            // Fallback total con JS para asegurar la interacción en CI
             ((org.openqa.selenium.JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
         }
+        
+        // Pequeña espera para que el DOM se estabilice tras el click
+        try { Thread.sleep(200); } catch (InterruptedException ignored) {}
     }
 
     // SafeNavigation con reintentos para CI

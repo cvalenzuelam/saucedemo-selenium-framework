@@ -40,11 +40,14 @@ public class InventoryPage extends BasePage {
     }
 
     public String getCartBadgeCount() {
-        try {
-            return wait.until(ExpectedConditions.visibilityOfElementLocated(cartBadge)).getText();
-        } catch (Exception e) {
-            return "0";
+        if (driver.findElements(cartBadge).size() > 0) {
+            try {
+                return driver.findElement(cartBadge).getText();
+            } catch (Exception e) {
+                return "0";
+            }
         }
+        return "0";
     }
 
     public void selectSortOption(String optionText) {
