@@ -35,7 +35,7 @@ public class LoginPage extends BasePage {
     }
 
     public InventoryPage clickLogin() {
-        wait.until(ExpectedConditions.elementToBeClickable(loginButton)).click();
+        click(loginButton);
         return new InventoryPage(driver);
     }
 
@@ -54,7 +54,7 @@ public class LoginPage extends BasePage {
     public LoginPage loginWithInvalidCredentials(String user, String pass) {
         enterUsername(user);
         enterPassword(pass);
-        wait.until(ExpectedConditions.elementToBeClickable(loginButton)).click();
+        click(loginButton);
         return this;
     }
 

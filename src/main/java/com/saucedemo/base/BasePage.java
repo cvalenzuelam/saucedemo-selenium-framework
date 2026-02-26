@@ -17,20 +17,18 @@ public class BasePage {
     }
 
     protected void click(By locator) {
+        // 1. Esperamos presencia en el DOM
         wait.until(org.openqa.selenium.support.ui.ExpectedConditions.presenceOfElementLocated(locator));
         org.openqa.selenium.WebElement element = driver.findElement(locator);
+        
+        // 2. Scroll y visibilidad para seguridad visual si se depura
         ((org.openqa.selenium.JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView({block: 'center'});", element);
         
-        try {
-            wait.until(org.openqa.selenium.support.ui.ExpectedConditions.elementToBeClickable(locator));
-            element.click();
-        } catch (Exception e) {
-            // Fallback total con JS para asegurar la interacción en CI
-            ((org.openqa.selenium.JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
-        }
+        // 3. Click prioritario por JavaScript (más estable en CI/Headless)
+        ((org.openqa.selenium.JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
         
-        // Pequeña espera para que el DOM se estabilice tras el click
-        try { Thread.sleep(200); } catch (InterruptedException ignored) {}
+        // 4. Pausa técnica breve para que la UI de SauceDemo procese el cambio
+        try { Thread.sleep(500); } catch (InterruptedException ignored) {}
     }
 
     // SafeNavigation con reintentos para CI
