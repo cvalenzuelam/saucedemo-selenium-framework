@@ -29,6 +29,18 @@ jobs:
           cache: 'maven'
 
       # PASO C: Ejecutar los tests usando Maven.
-      # Nota: Usamos "mvn test" tal cual lo haces en tu PC.
+      # Usamos -DcontinueIfFail=true o similar no es necesario, mvn test fallará el build si hay errores,
+      # pero el siguiente paso se ejecutará gracias a "if: always()".
       - name: Ejecutar Suite de Pruebas
         run: mvn clean test
+
+      # PASO D: Subir los resultados de Allure como un artefacto de GitHub.
+      # Esto se ejecutará SIEMPRE, incluso si las pruebas fallan.
+      - name: Subir Resultados de Allure
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-results
+          path: allure-results
+          retention-days: 5
+

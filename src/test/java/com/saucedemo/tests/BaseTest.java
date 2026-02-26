@@ -20,7 +20,7 @@ import java.time.Duration;
 public class BaseTest {
     protected WebDriver driver;
 
-    public WebDriver getDriverana() {
+    public WebDriver getDriver() {
         return driver;
     }
 
