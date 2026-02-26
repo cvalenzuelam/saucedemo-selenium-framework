@@ -47,6 +47,10 @@ public class CartTest extends BaseTest {
     @Test(description = "Validar que el botón Continue Shopping regresa al inventario")
     public void testContinueShopping() {
         cartPage.clickContinueShopping();
+        // Espera explícita para asegurar que la navegación terminó en headless
+        org.openqa.selenium.support.ui.WebDriverWait longWait = new org.openqa.selenium.support.ui.WebDriverWait(driver, java.time.Duration.ofSeconds(5));
+        longWait.until(org.openqa.selenium.support.ui.ExpectedConditions.urlContains("inventory.html"));
+        
         Assert.assertTrue(driver.getCurrentUrl().contains("inventory.html"), 
             "No se regresó a la página de inventario.");
     }

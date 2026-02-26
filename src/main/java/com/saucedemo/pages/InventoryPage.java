@@ -10,6 +10,7 @@ public class InventoryPage extends BasePage {
     // 1. Localizadores
     private By titleText = By.className("title");
     private By inventoryItems = By.className("inventory_item");
+    private By cartLink = By.className("shopping_cart_link");
     private By cartBadge = By.className("shopping_cart_badge");
     private By addToCartButtons = By.cssSelector("button[id^='add-to-cart']");
     private By removeButtons = By.cssSelector("button[id^='remove']");
@@ -54,6 +55,6 @@ public class InventoryPage extends BasePage {
     }
 
     public void goToCart() {
-        wait.until(ExpectedConditions.elementToBeClickable(cartBadge)).click();
+        wait.until(ExpectedConditions.elementToBeClickable(cartLink)).click();
     }
 }

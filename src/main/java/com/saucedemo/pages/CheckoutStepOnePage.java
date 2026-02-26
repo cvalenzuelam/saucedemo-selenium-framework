@@ -23,8 +23,9 @@ public class CheckoutStepOnePage extends BasePage {
         wait.until(ExpectedConditions.visibilityOfElementLocated(zipCodeInput)).sendKeys(zipCode);
     }
 
-    public void clickContinue() {
+    public CheckoutStepTwoPage clickContinue() {
         wait.until(ExpectedConditions.elementToBeClickable(continueButton)).click();
+        return new CheckoutStepTwoPage(driver);
     }
 
     public String getErrorMessage() {

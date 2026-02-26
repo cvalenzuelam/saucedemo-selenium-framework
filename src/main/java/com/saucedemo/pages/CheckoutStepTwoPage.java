@@ -14,10 +14,11 @@ public class CheckoutStepTwoPage extends BasePage {
     }
 
     public String getTotal() {
-        return driver.findElement(totalLabel).getText();
+        return wait.until(org.openqa.selenium.support.ui.ExpectedConditions.visibilityOfElementLocated(totalLabel)).getText();
     }
 
-    public void clickFinish() {
-        driver.findElement(finishButton).click();
+    public CheckoutCompletePage clickFinish() {
+        wait.until(org.openqa.selenium.support.ui.ExpectedConditions.elementToBeClickable(finishButton)).click();
+        return new CheckoutCompletePage(driver);
     }
 }

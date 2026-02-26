@@ -18,25 +18,22 @@ public class CheckoutTest extends BaseTest {
     public void setupCheckout() {
         loginPage = new LoginPage(driver);
         cartPage = new CartPage(driver);
-        stepOnePage = new CheckoutStepOnePage(driver);
-        stepTwoPage = new CheckoutStepTwoPage(driver);
-        completePage = new CheckoutCompletePage(driver);
 
         // Preparación: Login -> Add to Cart -> Cart -> Checkout usando Fluent Interface
         inventoryPage = loginPage.loginAs("standard_user", "secret_sauce");
         inventoryPage.addFirstItemToCart();
         inventoryPage.goToCart();
-        cartPage.clickCheckout();
+        stepOnePage = cartPage.clickCheckout();
     }
 
     @Test(priority = 1, description = "Validar el flujo completo de compra exitosa")
     public void testSuccessfulCheckout() {
         stepOnePage.enterInformation("Chris", "Automation", "00000");
-        stepOnePage.clickContinue();
+        stepTwoPage = stepOnePage.clickContinue();
 
         // Validamos que estamos en el resumen (Overview)
         Assert.assertTrue(driver.getCurrentUrl().contains("checkout-step-two.html"));
-        stepTwoPage.clickFinish();
+        completePage = stepTwoPage.clickFinish();
 
         // Validamos el mensaje final
         Assert.assertEquals(completePage.getConfirmationMessage(), "Thank you for your order!");
@@ -45,7 +42,7 @@ public class CheckoutTest extends BaseTest {
     @Test(priority = 2, description = "Validar validación de campos obligatorios en el checkout")
     public void testCheckoutMandatoryFields() {
         stepOnePage.enterInformation("", "", "");
-        stepOnePage.clickContinue();
+        stepOnePage.clickContinue(); // No guardamos el resultado porque esperamos error en la misma página
         
         Assert.assertEquals(stepOnePage.getErrorMessage(), "Error: First Name is required");
     }

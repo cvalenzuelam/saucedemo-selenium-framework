@@ -13,6 +13,6 @@ public class CheckoutCompletePage extends BasePage {
     }
 
     public String getConfirmationMessage() {
-        return driver.findElement(headerText).getText();
+        return wait.until(org.openqa.selenium.support.ui.ExpectedConditions.visibilityOfElementLocated(headerText)).getText();
     }
 }

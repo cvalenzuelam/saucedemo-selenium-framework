@@ -32,15 +32,17 @@ public class CartPage extends BasePage {
         return wait.until(ExpectedConditions.visibilityOfElementLocated(itemName)).getText();
     }
 
-    public void clickCheckout() {
+    public CheckoutStepOnePage clickCheckout() {
         wait.until(ExpectedConditions.elementToBeClickable(checkoutButton)).click();
+        return new CheckoutStepOnePage(driver);
     }
 
     public void removeFirstItem() {
         wait.until(ExpectedConditions.elementToBeClickable(removeButtons)).click();
     }
 
-    public void clickContinueShopping() {
+    public InventoryPage clickContinueShopping() {
         wait.until(ExpectedConditions.elementToBeClickable(continueShoppingButton)).click();
+        return new InventoryPage(driver);
     }
 }
