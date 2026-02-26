@@ -27,17 +27,17 @@ public class CheckoutStepOnePage extends BasePage {
 
     public CheckoutStepTwoPage clickContinue() {
         click(continueButton);
-        // Esperamos un momento para ver si hay navegación o error
+        // Intentamos esperar navegación o error de forma más robusta
         try {
-            // Un timeout más breve para CI que detecte si hay navegación rápida o error
-            new WebDriverWait(driver, Duration.ofSeconds(5)).until(d -> 
+            new WebDriverWait(driver, Duration.ofSeconds(10)).until(d -> 
                 d.getCurrentUrl().contains("checkout-step-two.html") || 
                 !getErrorMessage().isEmpty()
             );
         } catch (Exception e) {
-            // Fallback: si no hubo navegación y no hay error, intentamos click JS
+            // Reintento final por click JS si no hay navegación ni error
             if (getErrorMessage().isEmpty() && !driver.getCurrentUrl().contains("checkout-step-two.html")) {
                 ((org.openqa.selenium.JavascriptExecutor) driver).executeScript("arguments[0].click();", driver.findElement(continueButton));
+                new WebDriverWait(driver, Duration.ofSeconds(5)).until(d -> d.getCurrentUrl().contains("checkout-step-two.html"));
             }
         }
         return new CheckoutStepTwoPage(driver);

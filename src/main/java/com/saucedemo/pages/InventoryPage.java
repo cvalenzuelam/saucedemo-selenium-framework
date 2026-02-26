@@ -37,6 +37,8 @@ public class InventoryPage extends BasePage {
 
     public void removeFirstItemFromCart() {
         click(removeButtons);
+        // Esperamos a que el badge desaparezca o cambie (en SauceDemo desaparece si es 0)
+        wait.until(d -> getCartBadgeCount().equals("0"));
     }
 
     public String getCartBadgeCount() {
