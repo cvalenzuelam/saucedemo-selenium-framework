@@ -1,0 +1,34 @@
+# 1. Nombre de la tarea que verás en GitHub
+name: SauceDemo UI Automation Tests
+
+# 2. ¿Cuándo se ejecutará esto?
+# Cada vez que alguien haga un "push" a la rama main.
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+# 3. ¿Qué pasos debe seguir la máquina virtual de GitHub?
+jobs:
+  automation-suite:
+    # Usaremos una computadora con Linux (Ubuntu) para correr los tests.
+    runs-on: ubuntu-latest
+
+    steps:
+      # PASO A: La máquina virtual descarga tu código de GitHub.
+      - name: Descargar código del repositorio
+        uses: actions/checkout@v4
+
+      # PASO B: Instala Java versión 21 (la que usa tu pom.xml).
+      - name: Instalar Java (JDK 21)
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: 'maven'
+
+      # PASO C: Ejecutar los tests usando Maven.
+      # Nota: Usamos "mvn test" tal cual lo haces en tu PC.
+      - name: Ejecutar Suite de Pruebas
+        run: mvn clean test
