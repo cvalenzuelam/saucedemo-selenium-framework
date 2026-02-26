@@ -5,6 +5,10 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
 
+/**
+ * Clase base para todas las páginas del proyecto SauceDemo.
+ * Contiene interacciones robustas mediante JavaScript y esperas explícitas para CI.
+ */
 public class BasePage {
     // 1. Declaramos el WebDriver como 'protected'
     protected WebDriver driver;
