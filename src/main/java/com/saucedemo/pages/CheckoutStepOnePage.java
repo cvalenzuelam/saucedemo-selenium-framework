@@ -3,6 +3,7 @@ package com.saucedemo.pages;
 import com.saucedemo.base.BasePage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 
 public class CheckoutStepOnePage extends BasePage {
 
@@ -17,18 +18,18 @@ public class CheckoutStepOnePage extends BasePage {
     }
 
     public void enterInformation(String firstName, String lastName, String zipCode) {
-        driver.findElement(firstNameInput).sendKeys(firstName);
-        driver.findElement(lastNameInput).sendKeys(lastName);
-        driver.findElement(zipCodeInput).sendKeys(zipCode);
+        wait.until(ExpectedConditions.visibilityOfElementLocated(firstNameInput)).sendKeys(firstName);
+        wait.until(ExpectedConditions.visibilityOfElementLocated(lastNameInput)).sendKeys(lastName);
+        wait.until(ExpectedConditions.visibilityOfElementLocated(zipCodeInput)).sendKeys(zipCode);
     }
 
     public void clickContinue() {
-        driver.findElement(continueButton).click();
+        wait.until(ExpectedConditions.elementToBeClickable(continueButton)).click();
     }
 
     public String getErrorMessage() {
         try {
-            return driver.findElement(errorMessage).getText();
+            return wait.until(ExpectedConditions.visibilityOfElementLocated(errorMessage)).getText();
         } catch (Exception e) {
             return "";
         }

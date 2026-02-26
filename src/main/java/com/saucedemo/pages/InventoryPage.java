@@ -3,6 +3,7 @@ package com.saucedemo.pages;
 import com.saucedemo.base.BasePage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 
 public class InventoryPage extends BasePage {
 
@@ -21,38 +22,38 @@ public class InventoryPage extends BasePage {
 
     // 2. Acciones
     public String getTitle() {
-        return driver.findElement(titleText).getText();
+        return wait.until(ExpectedConditions.visibilityOfElementLocated(titleText)).getText();
     }
 
     public int getInventoryItemsCount() {
-        return driver.findElements(inventoryItems).size();
+        return wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(inventoryItems)).size();
     }
 
     public void addFirstItemToCart() {
-        driver.findElements(addToCartButtons).get(0).click();
+        wait.until(ExpectedConditions.elementToBeClickable(addToCartButtons)).click();
     }
 
     public void removeFirstItemFromCart() {
-        driver.findElements(removeButtons).get(0).click();
+        wait.until(ExpectedConditions.elementToBeClickable(removeButtons)).click();
     }
 
     public String getCartBadgeCount() {
         try {
-            return driver.findElement(cartBadge).getText();
+            return wait.until(ExpectedConditions.visibilityOfElementLocated(cartBadge)).getText();
         } catch (Exception e) {
             return "0";
         }
     }
 
     public void selectSortOption(String optionText) {
-        driver.findElement(sortDropdown).sendKeys(optionText);
+        wait.until(ExpectedConditions.visibilityOfElementLocated(sortDropdown)).sendKeys(optionText);
     }
 
     public String getFirstItemPrice() {
-        return driver.findElements(itemPrices).get(0).getText();
+        return wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(itemPrices)).get(0).getText();
     }
 
     public void goToCart() {
-        driver.findElement(cartBadge).click();
+        wait.until(ExpectedConditions.elementToBeClickable(cartBadge)).click();
     }
 }
