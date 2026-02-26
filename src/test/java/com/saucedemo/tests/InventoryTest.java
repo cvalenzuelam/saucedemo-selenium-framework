@@ -20,8 +20,8 @@ public class InventoryTest extends BaseTest {
 
     @Test(priority = 1, description = "Validar que el título de la página es Products")
     public void testInventoryTitle() {
-        // ERROR INTENCIONADO: Esperamos "Tienda de Mochilas" para forzar el fallo y ver el screenshot
-        Assert.assertEquals(inventoryPage.getTitle(), "Tienda de Mochilas", "El título no coincide (Fallo intencionado)");
+        // CORRECCIÓN: Volvemos al título real para que el test pase en GitHub Actions
+        Assert.assertEquals(inventoryPage.getTitle(), "Products", "El título de la página de inventario es incorrecto.");
     }
 
     @Test(priority = 2, description = "Validar que hay 6 productos en la lista")
