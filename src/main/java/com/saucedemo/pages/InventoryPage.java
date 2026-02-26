@@ -32,11 +32,11 @@ public class InventoryPage extends BasePage {
     }
 
     public void addFirstItemToCart() {
-        wait.until(ExpectedConditions.elementToBeClickable(addToCartButtons)).click();
+        click(addToCartButtons);
     }
 
     public void removeFirstItemFromCart() {
-        wait.until(ExpectedConditions.elementToBeClickable(removeButtons)).click();
+        click(removeButtons);
     }
 
     public String getCartBadgeCount() {
