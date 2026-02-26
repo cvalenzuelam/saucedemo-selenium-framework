@@ -29,6 +29,7 @@ public class BasePage {
         }
     }
 
+    // SafeNavigation con reintentos para CI
     protected void safeNavigate(By locator, String expectedUrlPart) {
         click(locator);
         try {
