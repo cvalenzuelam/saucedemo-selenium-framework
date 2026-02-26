@@ -9,10 +9,10 @@ public class CartPage extends BasePage {
 
     // 1. Localizadores
     private By cartItems = By.className("cart_item");
-    private By checkoutButton = By.id("checkout");
+    private By checkoutButton = By.cssSelector("[data-test='checkout']");
     private By itemName = By.className("inventory_item_name");
     private By removeButtons = By.cssSelector("button[id^='remove']");
-    private By continueShoppingButton = By.id("continue-shopping");
+    private By continueShoppingButton = By.cssSelector("[data-test='continue-shopping']");
 
     public CartPage(WebDriver driver) {
         super(driver);
@@ -20,12 +20,8 @@ public class CartPage extends BasePage {
 
     // 2. Acciones
     public int getCartItemsCount() {
-        // Usamos presenceOfAllElements para que espere al menos a que la lista cargue
-        try {
-            return wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(cartItems)).size();
-        } catch (Exception e) {
-            return 0; // Si no hay elementos, la lista no existe
-        }
+        // Volvemos a findElements directo porque si la lista está vacía no queremos esperar timeout
+        return driver.findElements(cartItems).size();
     }
 
     public String getFirstItemName() {
@@ -39,9 +35,12 @@ public class CartPage extends BasePage {
     }
 
     public void removeFirstItem() {
+        int initialCount = getCartItemsCount();
         click(removeButtons);
-        // Esperamos a que el elemento desaparezca o se actualice (SauceDemo actualiza el DOM)
-        wait.until(ExpectedConditions.invisibilityOfElementLocated(removeButtons));
+        // Esperamos a que el número de elementos cambie
+        if (initialCount > 0) {
+            wait.until(d -> getCartItemsCount() < initialCount);
+        }
     }
 
     public InventoryPage clickContinueShopping() {

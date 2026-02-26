@@ -6,7 +6,7 @@ import org.openqa.selenium.WebDriver;
 
 public class CheckoutStepTwoPage extends BasePage {
 
-    private By finishButton = By.id("finish");
+    private By finishButton = By.cssSelector("[data-test='finish']");
     private By totalLabel = By.className("summary_total_label");
 
     public CheckoutStepTwoPage(WebDriver driver) {

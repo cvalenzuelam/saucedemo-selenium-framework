@@ -14,7 +14,7 @@ public class InventoryPage extends BasePage {
     private By cartBadge = By.className("shopping_cart_badge");
     private By addToCartButtons = By.cssSelector("button[id^='add-to-cart']");
     private By removeButtons = By.cssSelector("button[id^='remove']");
-    private By sortDropdown = By.className("product_sort_container");
+    private By sortDropdown = By.cssSelector("[data-test='product-sort-container']");
     private By itemPrices = By.className("inventory_item_price");
 
     public InventoryPage(WebDriver driver) {

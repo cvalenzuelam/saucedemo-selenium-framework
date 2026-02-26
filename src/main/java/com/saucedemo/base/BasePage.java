@@ -17,13 +17,18 @@ public class BasePage {
     }
 
     protected void click(By locator) {
-        wait.until(org.openqa.selenium.support.ui.ExpectedConditions.elementToBeClickable(locator));
+        wait.until(org.openqa.selenium.support.ui.ExpectedConditions.presenceOfElementLocated(locator));
+        org.openqa.selenium.WebElement element = driver.findElement(locator);
+        
+        // Aseguramos que el elemento esté en el área visible
+        ((org.openqa.selenium.JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView({block: 'center'});", element);
+        
         try {
-            driver.findElement(locator).click();
+            wait.until(org.openqa.selenium.support.ui.ExpectedConditions.elementToBeClickable(locator));
+            element.click();
         } catch (Exception e) {
-            // Fallback a JavaScript click si el normal falla en headless
-            org.openqa.selenium.JavascriptExecutor js = (org.openqa.selenium.JavascriptExecutor) driver;
-            js.executeScript("arguments[0].click();", driver.findElement(locator));
+            // Último recurso: Click forzado por JS
+            ((org.openqa.selenium.JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
         }
     }
 

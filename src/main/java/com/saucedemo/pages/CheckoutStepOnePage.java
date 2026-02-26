@@ -7,11 +7,11 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 
 public class CheckoutStepOnePage extends BasePage {
 
-    private By firstNameInput = By.id("first-name");
-    private By lastNameInput = By.id("last-name");
-    private By zipCodeInput = By.id("postal-code");
-    private By continueButton = By.id("continue");
-    private By errorMessage = By.cssSelector("h3[data-test='error']");
+    private By firstNameInput = By.cssSelector("[data-test='firstName']");
+    private By lastNameInput = By.cssSelector("[data-test='lastName']");
+    private By zipCodeInput = By.cssSelector("[data-test='postalCode']");
+    private By continueButton = By.cssSelector("[data-test='continue']");
+    private By errorMessage = By.cssSelector("[data-test='error']");
 
     public CheckoutStepOnePage(WebDriver driver) {
         super(driver);
