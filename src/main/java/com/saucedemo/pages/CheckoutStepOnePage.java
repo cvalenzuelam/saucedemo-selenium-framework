@@ -24,7 +24,13 @@ public class CheckoutStepOnePage extends BasePage {
     }
 
     public CheckoutStepTwoPage clickContinue() {
-        wait.until(ExpectedConditions.elementToBeClickable(continueButton)).click();
+        click(continueButton);
+        // Si no hay error (URL cambia), esperamos la siguiente página
+        try {
+            waitForUrlContains("checkout-step-two.html");
+        } catch (Exception e) {
+            // Si hay error, nos quedamos en la misma página (test de campos obligatorios)
+        }
         return new CheckoutStepTwoPage(driver);
     }
 

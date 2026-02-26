@@ -55,6 +55,7 @@ public class InventoryPage extends BasePage {
     }
 
     public void goToCart() {
-        wait.until(ExpectedConditions.elementToBeClickable(cartLink)).click();
+        click(cartLink);
+        waitForUrlContains("cart.html");
     }
 }

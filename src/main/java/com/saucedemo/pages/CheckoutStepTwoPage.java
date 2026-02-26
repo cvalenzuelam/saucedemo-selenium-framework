@@ -18,7 +18,8 @@ public class CheckoutStepTwoPage extends BasePage {
     }
 
     public CheckoutCompletePage clickFinish() {
-        wait.until(org.openqa.selenium.support.ui.ExpectedConditions.elementToBeClickable(finishButton)).click();
+        click(finishButton);
+        waitForUrlContains("checkout-complete.html");
         return new CheckoutCompletePage(driver);
     }
 }

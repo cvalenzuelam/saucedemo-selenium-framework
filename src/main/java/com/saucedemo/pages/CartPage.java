@@ -33,16 +33,20 @@ public class CartPage extends BasePage {
     }
 
     public CheckoutStepOnePage clickCheckout() {
-        wait.until(ExpectedConditions.elementToBeClickable(checkoutButton)).click();
+        click(checkoutButton);
+        waitForUrlContains("checkout-step-one.html");
         return new CheckoutStepOnePage(driver);
     }
 
     public void removeFirstItem() {
-        wait.until(ExpectedConditions.elementToBeClickable(removeButtons)).click();
+        click(removeButtons);
+        // Esperamos a que el elemento desaparezca o se actualice (SauceDemo actualiza el DOM)
+        wait.until(ExpectedConditions.invisibilityOfElementLocated(removeButtons));
     }
 
     public InventoryPage clickContinueShopping() {
-        wait.until(ExpectedConditions.elementToBeClickable(continueShoppingButton)).click();
+        click(continueShoppingButton);
+        waitForUrlContains("inventory.html");
         return new InventoryPage(driver);
     }
 }
