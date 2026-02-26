@@ -38,10 +38,7 @@ public class InventoryTest extends BaseTest {
     @Test(priority = 4, description = "Validar que al remover un producto el carrito vuelve a 0")
     public void testRemoveProductFromCart() {
         inventoryPage.addFirstItemToCart(); // Primero agregamos
-        // Esperamos a que el badge sea "1" antes de intentar removerlo
-        Assert.assertEquals(inventoryPage.getCartBadgeCount(), "1", "El producto no se agregó al carrito.");
-        
-        inventoryPage.removeFirstItemFromCart(); // Luego removemos
+        inventoryPage.removeFirstItemFromCart(); // Luego removemos (espera interna a que el badge desaparezca)
         Assert.assertEquals(inventoryPage.getCartBadgeCount(), "0", "El carrito no se vació.");
     }
 

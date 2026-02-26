@@ -33,23 +33,24 @@ public class InventoryPage extends BasePage {
 
     public void addFirstItemToCart() {
         click(addToCartButtons);
+        // Esperamos a que el badge aparezca y sea "1" (o al menos aparezca)
+        wait.until(ExpectedConditions.visibilityOfElementLocated(cartBadge));
     }
 
     public void removeFirstItemFromCart() {
         click(removeButtons);
-        // Esperamos a que el badge desaparezca o cambie (en SauceDemo desaparece si es 0)
-        wait.until(d -> getCartBadgeCount().equals("0"));
+        // Esperamos a que el badge desaparezca (SauceDemo lo quita si es 0)
+        wait.until(ExpectedConditions.invisibilityOfElementLocated(cartBadge));
     }
 
     public String getCartBadgeCount() {
-        if (driver.findElements(cartBadge).size() > 0) {
-            try {
-                return driver.findElement(cartBadge).getText();
-            } catch (Exception e) {
-                return "0";
-            }
+        try {
+            // Espera corta para no penalizar si realmente debe ser 0, pero dar tiempo a la UI
+            return new WebDriverWait(driver, Duration.ofSeconds(3))
+                    .until(ExpectedConditions.visibilityOfElementLocated(cartBadge)).getText();
+        } catch (Exception e) {
+            return "0";
         }
-        return "0";
     }
 
     public void selectSortOption(String optionText) {
