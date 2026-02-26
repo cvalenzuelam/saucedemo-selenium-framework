@@ -21,14 +21,13 @@ public class BasePage {
     }
 
     protected void click(By locator) {
-        // 1. Esperamos presencia en el DOM
-        wait.until(org.openqa.selenium.support.ui.ExpectedConditions.presenceOfElementLocated(locator));
-        org.openqa.selenium.WebElement element = driver.findElement(locator);
+        // 1. Esperamos a que sea cliqueable
+        org.openqa.selenium.WebElement element = wait.until(org.openqa.selenium.support.ui.ExpectedConditions.elementToBeClickable(locator));
         
-        // 2. Scroll y visibilidad para seguridad visual si se depura
+        // 2. Scroll y visibilidad
         ((org.openqa.selenium.JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView({block: 'center'});", element);
         
-        // 3. Click prioritario por JavaScript (más estable en CI/Headless)
+        // 3. Click por JavaScript (más estable en CI para SauceDemo)
         ((org.openqa.selenium.JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
         
         // 4. Pausa técnica breve para que la UI de SauceDemo procese el cambio

@@ -17,12 +17,13 @@ public class CheckoutTest extends BaseTest {
     @BeforeMethod
     public void setupCheckout() {
         loginPage = new LoginPage(driver);
-        cartPage = new CartPage(driver);
 
         // Preparación: Login -> Add to Cart -> Cart -> Checkout usando Fluent Interface
         inventoryPage = loginPage.loginAs("standard_user", "secret_sauce");
         inventoryPage.addFirstItemToCart();
         inventoryPage.goToCart();
+        
+        cartPage = new CartPage(driver);
         stepOnePage = cartPage.clickCheckout();
     }
 
@@ -32,7 +33,9 @@ public class CheckoutTest extends BaseTest {
         stepTwoPage = stepOnePage.clickContinue();
 
         // Validamos que estamos en el resumen (Overview)
-        Assert.assertTrue(driver.getCurrentUrl().contains("checkout-step-two.html"));
+        Assert.assertTrue(driver.getCurrentUrl().contains("checkout-step-two.html"), 
+            "No se navegó a la página de resumen tras introducir información.");
+        
         completePage = stepTwoPage.clickFinish();
 
         // Validamos el mensaje final

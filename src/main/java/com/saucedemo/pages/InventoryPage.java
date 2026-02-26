@@ -3,6 +3,7 @@ package com.saucedemo.pages;
 import com.saucedemo.base.BasePage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -35,8 +36,11 @@ public class InventoryPage extends BasePage {
     }
 
     public void addFirstItemToCart() {
+        WebElement button = wait.until(ExpectedConditions.elementToBeClickable(addToCartButtons));
         click(addToCartButtons);
-        // Esperamos a que el badge aparezca y sea "1" (o al menos aparezca)
+        // SauceDemo cambia el texto del botón de 'Add to cart' a 'Remove'
+        wait.until(ExpectedConditions.textToBePresentInElement(button, "Remove"));
+        // También esperamos a que el badge aparezca
         wait.until(ExpectedConditions.visibilityOfElementLocated(cartBadge));
     }
 
