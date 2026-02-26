@@ -55,7 +55,6 @@ public class InventoryPage extends BasePage {
     }
 
     public void goToCart() {
-        click(cartLink);
-        waitForUrlContains("cart.html");
+        safeNavigate(cartLink, "cart.html");
     }
 }

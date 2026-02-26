@@ -29,8 +29,7 @@ public class CartPage extends BasePage {
     }
 
     public CheckoutStepOnePage clickCheckout() {
-        click(checkoutButton);
-        waitForUrlContains("checkout-step-one.html");
+        safeNavigate(checkoutButton, "checkout-step-one.html");
         return new CheckoutStepOnePage(driver);
     }
 
@@ -44,8 +43,7 @@ public class CartPage extends BasePage {
     }
 
     public InventoryPage clickContinueShopping() {
-        click(continueShoppingButton);
-        waitForUrlContains("inventory.html");
+        safeNavigate(continueShoppingButton, "inventory.html");
         return new InventoryPage(driver);
     }
 }

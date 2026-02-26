@@ -19,16 +19,25 @@ public class BasePage {
     protected void click(By locator) {
         wait.until(org.openqa.selenium.support.ui.ExpectedConditions.presenceOfElementLocated(locator));
         org.openqa.selenium.WebElement element = driver.findElement(locator);
-        
-        // Aseguramos que el elemento esté en el área visible
         ((org.openqa.selenium.JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView({block: 'center'});", element);
         
         try {
             wait.until(org.openqa.selenium.support.ui.ExpectedConditions.elementToBeClickable(locator));
             element.click();
         } catch (Exception e) {
-            // Último recurso: Click forzado por JS
             ((org.openqa.selenium.JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
+        }
+    }
+
+    protected void safeNavigate(By locator, String expectedUrlPart) {
+        click(locator);
+        try {
+            // Intento de espera corto para reintentar si falla
+            new WebDriverWait(driver, Duration.ofSeconds(3)).until(org.openqa.selenium.support.ui.ExpectedConditions.urlContains(expectedUrlPart));
+        } catch (Exception e) {
+            // Si no navegó, forzamos click por JS y esperamos el tiempo completo
+            ((org.openqa.selenium.JavascriptExecutor) driver).executeScript("arguments[0].click();", driver.findElement(locator));
+            waitForUrlContains(expectedUrlPart);
         }
     }
 

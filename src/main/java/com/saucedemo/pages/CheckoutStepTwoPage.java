@@ -18,8 +18,7 @@ public class CheckoutStepTwoPage extends BasePage {
     }
 
     public CheckoutCompletePage clickFinish() {
-        click(finishButton);
-        waitForUrlContains("checkout-complete.html");
+        safeNavigate(finishButton, "checkout-complete.html");
         return new CheckoutCompletePage(driver);
     }
 }
