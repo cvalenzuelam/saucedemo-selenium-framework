@@ -19,6 +19,7 @@ public class InventoryPage extends BasePage {
 
     public InventoryPage(WebDriver driver) {
         super(driver);
+        waitForPageReady();
     }
 
     // 2. Acciones

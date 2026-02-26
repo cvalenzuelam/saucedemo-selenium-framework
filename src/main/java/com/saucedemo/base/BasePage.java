@@ -31,15 +31,20 @@ public class BasePage {
 
     // SafeNavigation con reintentos para CI
     protected void safeNavigate(By locator, String expectedUrlPart) {
+        waitForPageReady();
         click(locator);
         try {
-            // Intento de espera corto para reintentar si falla
             new WebDriverWait(driver, Duration.ofSeconds(3)).until(org.openqa.selenium.support.ui.ExpectedConditions.urlContains(expectedUrlPart));
         } catch (Exception e) {
-            // Si no navegó, forzamos click por JS y esperamos el tiempo completo
+            // Si el primer intento falló, re-buscamos el elemento y forzamos por JS
             ((org.openqa.selenium.JavascriptExecutor) driver).executeScript("arguments[0].click();", driver.findElement(locator));
             waitForUrlContains(expectedUrlPart);
         }
+    }
+
+    protected void waitForPageReady() {
+        new WebDriverWait(driver, Duration.ofSeconds(10)).until(d -> 
+            ((org.openqa.selenium.JavascriptExecutor) d).executeScript("return document.readyState").equals("complete"));
     }
 
     protected void waitForUrlContains(String urlPart) {

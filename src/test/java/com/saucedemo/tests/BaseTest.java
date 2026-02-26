@@ -45,6 +45,9 @@ public class BaseTest {
                 chromeOptions.addArguments("--disable-gpu");
                 chromeOptions.addArguments("--no-sandbox");
                 chromeOptions.addArguments("--disable-dev-shm-usage");
+                chromeOptions.addArguments("--remote-allow-origins=*");
+                chromeOptions.addArguments("--proxy-server='direct://'");
+                chromeOptions.addArguments("--proxy-bypass-list=*");
                 driver = new ChromeDriver(chromeOptions);
                 break;
             case "firefox":
@@ -59,7 +62,8 @@ public class BaseTest {
                 throw new RuntimeException("Navegador no soportado: " + browser);
         }
 
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(timeout));
+        // IMPORTANTE: Ponemos el implicit wait a 0 para que no choque con las esperas explícitas
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(0));
         driver.get(url);
     }
 
