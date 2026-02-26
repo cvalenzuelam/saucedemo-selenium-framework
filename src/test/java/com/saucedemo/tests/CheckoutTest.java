@@ -32,6 +32,10 @@ public class CheckoutTest extends BaseTest {
         stepOnePage.enterInformation("Chris", "Automation", "00000");
         stepTwoPage = stepOnePage.clickContinue();
 
+        // Espera explícita robusta para el cambio de URL antes de validar
+        new org.openqa.selenium.support.ui.WebDriverWait(driver, java.time.Duration.ofSeconds(15))
+            .until(org.openqa.selenium.support.ui.ExpectedConditions.urlContains("checkout-step-two.html"));
+
         // Validamos que estamos en el resumen (Overview)
         Assert.assertTrue(driver.getCurrentUrl().contains("checkout-step-two.html"), 
             "No se navegó a la página de resumen tras introducir información.");

@@ -33,23 +33,14 @@ public class CheckoutStepOnePage extends BasePage {
         element.clear();
         element.sendKeys(value);
         
-        // Verificación de seguridad: si sendKeys falló (común en CI/Headless), forzamos vía JS
-        String currentValue = element.getAttribute("value");
-        if (currentValue == null || currentValue.isEmpty()) {
-            ((org.openqa.selenium.JavascriptExecutor) driver).executeScript(
-                "arguments[0].value = arguments[1]; " +
-                "arguments[0].dispatchEvent(new Event('input', { bubbles: true })); " +
-                "arguments[0].dispatchEvent(new Event('change', { bubbles: true }));", 
-                element, value);
+        // Verificación de seguridad básica (JS fallback solo si es estrictamente necesario)
+        if (!value.equals(element.getAttribute("value"))) {
+            ((org.openqa.selenium.JavascriptExecutor) driver).executeScript("arguments[0].value = arguments[1];", element, value);
         }
     }
 
     public CheckoutStepTwoPage clickContinue() {
         click(continueButton);
-        // Esperamos a que la URL cambie para asegurar que el click fue procesado
-        try {
-            new WebDriverWait(driver, Duration.ofSeconds(5)).until(ExpectedConditions.urlContains("checkout-step-two.html"));
-        } catch (Exception ignored) {}
         return new CheckoutStepTwoPage(driver);
     }
 
