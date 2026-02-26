@@ -36,23 +36,33 @@ public class InventoryPage extends BasePage {
     }
 
     public void addFirstItemToCart() {
-        WebElement button = wait.until(ExpectedConditions.elementToBeClickable(addToCartButtons));
-        click(addToCartButtons);
-        // SauceDemo cambia el texto del botón de 'Add to cart' a 'Remove'
-        wait.until(ExpectedConditions.textToBePresentInElement(button, "Remove"));
-        // También esperamos a que el badge aparezca
+        // En headless, a veces el primer click no se registra por el estado de React.
+        // Usamos un bucle de reintento corto basado en la visibilidad del badge.
+        int attempts = 0;
+        while (attempts < 3) {
+            try {
+                WebElement button = wait.until(ExpectedConditions.elementToBeClickable(addToCartButtons));
+                click(addToCartButtons);
+                
+                // Si el badge aparece, la acción fue exitosa
+                new WebDriverWait(driver, Duration.ofSeconds(3))
+                    .until(ExpectedConditions.visibilityOfElementLocated(cartBadge));
+                return; 
+            } catch (Exception e) {
+                attempts++;
+            }
+        }
+        // Fallback final: si el bucle falló, intentamos una última espera larga
         wait.until(ExpectedConditions.visibilityOfElementLocated(cartBadge));
     }
 
     public void removeFirstItemFromCart() {
         click(removeButtons);
-        // Esperamos a que el badge desaparezca (SauceDemo lo quita si es 0)
         wait.until(ExpectedConditions.invisibilityOfElementLocated(cartBadge));
     }
 
     public String getCartBadgeCount() {
         try {
-            // Espera corta para no penalizar si realmente debe ser 0, pero dar tiempo a la UI
             return new WebDriverWait(driver, Duration.ofSeconds(3))
                     .until(ExpectedConditions.visibilityOfElementLocated(cartBadge)).getText();
         } catch (Exception e) {
@@ -61,16 +71,12 @@ public class InventoryPage extends BasePage {
     }
 
     public void selectSortOption(String optionText) {
-        // En CI es más seguro usar Select y esperar un momento
-        org.openqa.selenium.WebElement selectElement = wait.until(ExpectedConditions.visibilityOfElementLocated(sortDropdown));
+        WebElement selectElement = wait.until(ExpectedConditions.visibilityOfElementLocated(sortDropdown));
         new Select(selectElement).selectByVisibleText(optionText);
-        
-        // Esperamos a que el primer precio cambie o se estabilice tras el ordenamiento
         try { Thread.sleep(1000); } catch (InterruptedException ignored) {}
     }
 
     public String getFirstItemPrice() {
-        // Aseguramos que los elementos estén presentes antes de obtener el primero
         return wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(itemPrices)).get(0).getText();
     }
 
