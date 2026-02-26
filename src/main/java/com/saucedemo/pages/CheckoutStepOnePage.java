@@ -27,14 +27,13 @@ public class CheckoutStepOnePage extends BasePage {
 
     public CheckoutStepTwoPage clickContinue() {
         click(continueButton);
-        // Esperamos a ver si navegó o si apareció un error
+        // SauceDemo a veces tarda en CI, esperamos hasta 10 segundos la navegación
         try {
-            new WebDriverWait(driver, Duration.ofSeconds(5)).until(d -> 
-                d.getCurrentUrl().contains("checkout-step-two.html") || 
-                !getErrorMessage().isEmpty()
+            new WebDriverWait(driver, Duration.ofSeconds(10)).until(d -> 
+                d.getCurrentUrl().contains("checkout-step-two.html")
             );
         } catch (Exception e) {
-            // No hacemos nada, el test fallará en la aserción de la página siguiente
+            // Si no navegó, puede ser por un error de validación; permitimos que el test decida con su aserción
         }
         return new CheckoutStepTwoPage(driver);
     }

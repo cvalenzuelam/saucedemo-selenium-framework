@@ -4,6 +4,7 @@ import com.saucedemo.base.BasePage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
 
@@ -56,10 +57,16 @@ public class InventoryPage extends BasePage {
     }
 
     public void selectSortOption(String optionText) {
-        wait.until(ExpectedConditions.visibilityOfElementLocated(sortDropdown)).sendKeys(optionText);
+        // En CI es más seguro usar Select y esperar un momento
+        org.openqa.selenium.WebElement selectElement = wait.until(ExpectedConditions.visibilityOfElementLocated(sortDropdown));
+        new Select(selectElement).selectByVisibleText(optionText);
+        
+        // Esperamos a que el primer precio cambie o se estabilice tras el ordenamiento
+        try { Thread.sleep(1000); } catch (InterruptedException ignored) {}
     }
 
     public String getFirstItemPrice() {
+        // Aseguramos que los elementos estén presentes antes de obtener el primero
         return wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(itemPrices)).get(0).getText();
     }
 

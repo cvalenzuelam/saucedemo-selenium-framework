@@ -35,10 +35,11 @@ public class BasePage {
     protected void safeNavigate(By locator, String expectedUrlPart) {
         waitForPageReady();
         click(locator);
+        // Esperamos un momento razonable para la transición de URL
         try {
-            new WebDriverWait(driver, Duration.ofSeconds(3)).until(org.openqa.selenium.support.ui.ExpectedConditions.urlContains(expectedUrlPart));
+            new WebDriverWait(driver, Duration.ofSeconds(10)).until(org.openqa.selenium.support.ui.ExpectedConditions.urlContains(expectedUrlPart));
         } catch (Exception e) {
-            // Si el primer intento falló, re-buscamos el elemento y forzamos por JS
+            // Si el primer intento falló por timeout de Selenium, reintentamos un click JS final
             ((org.openqa.selenium.JavascriptExecutor) driver).executeScript("arguments[0].click();", driver.findElement(locator));
             waitForUrlContains(expectedUrlPart);
         }
